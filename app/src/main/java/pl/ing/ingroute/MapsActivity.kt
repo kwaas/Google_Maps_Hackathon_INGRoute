@@ -2,6 +2,9 @@ package pl.ing.ingroute
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -14,6 +17,7 @@ import com.google.maps.errors.ApiException
 import com.google.maps.model.DirectionsResult
 import com.google.maps.model.DirectionsRoute
 import com.google.maps.model.TravelMode
+import kotlinx.android.synthetic.main.activity_maps.*
 import org.joda.time.DateTime
 import java.io.IOException
 import java.util.concurrent.TimeUnit
@@ -26,9 +30,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
+        setSupportActionBar(toolbar)
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+        fab.setOnClickListener { findBestRoute() }
     }
 
     private fun getDirectionsDetails(origin: LatLng, destination: LatLng, mode: TravelMode): DirectionsResult? {
@@ -67,7 +73,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(allLocations[0].position.coordinates, 12f))
 
-        val currentLocation = locationManager.getCurrentLocation(applicationContext)
+        val currentLocation = locationManager.getCurrentLocation(this)
 
         googleMap.addMarker(MarkerOptions()
                 .position(currentLocation.coordinates)
@@ -133,5 +139,22 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 .setConnectTimeout(1, TimeUnit.SECONDS)
                 .setReadTimeout(1, TimeUnit.SECONDS)
                 .setWriteTimeout(1, TimeUnit.SECONDS)
+    }
+
+    private fun findBestRoute() {
+        Toast.makeText(this, "TODO Znajdź najlepszą trasę", Toast.LENGTH_SHORT).show()
+        //TODO
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_settings -> true
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }
