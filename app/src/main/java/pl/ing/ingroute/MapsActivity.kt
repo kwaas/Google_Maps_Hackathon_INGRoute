@@ -6,10 +6,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.maps.model.*
 import com.google.maps.DirectionsApi
 import com.google.maps.GeoApiContext
 import com.google.maps.android.PolyUtil
@@ -26,26 +23,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private val overview = 0
 
-    private var PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 104
-
-    private lateinit var mMap: GoogleMap
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 
-    private fun getDirectionsDetails(origin: String, destination: String, mode: TravelMode): DirectionsResult? {
+    private fun getDirectionsDetails(origin: LatLng, destination: LatLng, mode: TravelMode): DirectionsResult? {
         val now = DateTime()
         try {
             return DirectionsApi.newRequest(getGeoContext())
                     .mode(mode)
-                    .origin(origin)
-                    .destination(destination)
+                    .origin(com.google.maps.model.LatLng(origin.latitude, origin.longitude))
+                    .destination(com.google.maps.model.LatLng(destination.latitude, destination.longitude))
                     .departureTime(now)
                     .await()
         } catch (e: ApiException) {
@@ -62,13 +54,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-
-        //route(googleMap)
         markers(googleMap)
     }
 
     private fun markers(googleMap: GoogleMap) {
-
         val locationManager = LocationManager.newInstance()
         val allLocations = locationManager.getAllDepartmentsLocation()
         allLocations.forEach {
@@ -78,20 +67,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(allLocations[0].position.coordinates, 12f))
 
+        val currentLocation = locationManager.getCurrentLocation(applicationContext)
+
         googleMap.addMarker(MarkerOptions()
-                .position(locationManager.getCurrentLocation(applicationContext).coordinates)
+                .position(currentLocation.coordinates)
                 .title("Twoja lokalizacja")).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
 
         googleMap.setOnMarkerClickListener {
-            route(googleMap)
+            route(googleMap, currentLocation.coordinates, it.position)
             return@setOnMarkerClickListener true
         }
     }
 
-    private fun route(googleMap: GoogleMap) {
+    private fun route(googleMap: GoogleMap, origin: LatLng, destination: LatLng) {
         setupGoogleMapScreenSettings(googleMap)
-        val results = getDirectionsDetails("al. Jerozolimskie 54, 00-001 Warszawa", "Warszawa Al.Jerozolimskie 32 00-024",
-                TravelMode.DRIVING)
+        val results = getDirectionsDetails(origin, destination, TravelMode.DRIVING)
         if (results != null) {
             addPolyline(results, googleMap)
             positionCamera(results.routes[overview], googleMap)
@@ -123,9 +113,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(route.legs[overview].startLocation.lat, route.legs[overview].startLocation.lng), 12f))
     }
 
+    var polyline: Polyline? = null
+
     private fun addPolyline(results: DirectionsResult, mMap: GoogleMap) {
+        polyline?.remove()
         val decodedPath = PolyUtil.decode(results.routes[overview].overviewPolyline.encodedPath)
-        mMap.addPolyline(PolylineOptions().addAll(decodedPath))
+        polyline = mMap.addPolyline(PolylineOptions().addAll(decodedPath))
     }
 
     private fun getEndLocationTitle(results: DirectionsResult): String {
