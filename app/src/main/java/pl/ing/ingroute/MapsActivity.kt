@@ -6,6 +6,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
@@ -62,6 +63,32 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
 
+        //route(googleMap)
+        markers(googleMap)
+    }
+
+    private fun markers(googleMap: GoogleMap) {
+
+        val locationManager = LocationManager.newInstance()
+        val allLocations = locationManager.getAllDepartmentsLocation()
+        allLocations.forEach {
+            googleMap.addMarker(MarkerOptions()
+                    .position(it.position.coordinates)
+                    .title(it.street))
+        }
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(allLocations[0].position.coordinates, 12f))
+
+        googleMap.addMarker(MarkerOptions()
+                .position(locationManager.getCurrentLocation(applicationContext).coordinates)
+                .title("Twoja lokalizacja")).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+
+        googleMap.setOnMarkerClickListener {
+            route(googleMap)
+            return@setOnMarkerClickListener true
+        }
+    }
+
+    private fun route(googleMap: GoogleMap) {
         setupGoogleMapScreenSettings(googleMap)
         val results = getDirectionsDetails("al. Jerozolimskie 54, 00-001 Warszawa", "Warszawa Al.Jerozolimskie 32 00-024",
                 TravelMode.DRIVING)
@@ -71,6 +98,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             addMarkersToMap(results, googleMap)
         }
     }
+
 
     private fun setupGoogleMapScreenSettings(mMap: GoogleMap) {
         mMap.isBuildingsEnabled = true

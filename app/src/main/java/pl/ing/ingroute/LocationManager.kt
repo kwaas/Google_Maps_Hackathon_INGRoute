@@ -1,6 +1,9 @@
 package pl.ing.ingroute
 
+import android.content.Context
+import android.location.Geocoder
 import com.google.android.gms.maps.model.LatLng
+import java.util.*
 
 /**
  * Created by marcin.kwasniak on 10.10.2018
@@ -23,7 +26,16 @@ class LocationManager {
         }
     }
 
-    fun getAllLocations(): List<Location> {
+    fun getAllDepartmentsLocation(): List<Location> {
         return locations
+    }
+
+    fun getCurrentLocation(context: Context) : Position {
+        val locationName = "al. Jerozolimskie 54, 00-001 Warszawa"
+
+        val geocoder = Geocoder(context, Locale.getDefault())
+        val address = geocoder.getFromLocationName(locationName, 1)
+
+        return Position(LatLng(address.first().latitude, address.first().longitude))
     }
 }
