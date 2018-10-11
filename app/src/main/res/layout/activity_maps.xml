@@ -29,6 +29,7 @@
         android:layout_marginTop="76dp"
         android:layout_marginEnd="@dimen/fab_margin"
         app:backgroundTint="@color/colorPrimary"
+        android:tooltipText="Trasa w której będziesz obsłużony najszybciej"
         app:srcCompat="@android:drawable/ic_dialog_map" />
 
 </android.support.design.widget.CoordinatorLayout>
