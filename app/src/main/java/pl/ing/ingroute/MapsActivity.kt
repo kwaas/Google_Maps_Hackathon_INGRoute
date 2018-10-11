@@ -103,7 +103,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         googleMap.addMarker(MarkerOptions()
                 .position(currentLocation.coordinates)
                 .title("Twoja lokalizacja"))
-                .setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                //.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+            .setIcon(BitmapDescriptorFactory.fromBitmap(Marker.getMarkerBitmapFromView(R.drawable.here_marker, this)))
 
         googleMap.setOnMarkerClickListener {
             route(googleMap, currentLocation.coordinates, it.position)
