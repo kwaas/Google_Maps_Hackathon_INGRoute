@@ -1,7 +1,6 @@
 package pl.ing.ingroute
 
 import android.content.res.Resources
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -24,7 +23,6 @@ import kotlinx.android.synthetic.main.activity_maps.*
 import org.joda.time.DateTime
 import java.io.IOException
 import java.util.concurrent.TimeUnit
-import com.google.android.gms.maps.model.PolylineOptions
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -65,6 +63,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        googleMap.setInfoWindowAdapter(MarkerInfoViewAdapter(this))
         markers(googleMap)
         googleMap.uiSettings.isZoomControlsEnabled = true
         try {
@@ -82,11 +81,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val locationManager = LocationManager.newInstance()
         val allLocations = locationManager.getAllDepartmentsLocation()
         allLocations.forEach {
-            googleMap.addMarker(MarkerOptions()
+            val marker = googleMap.addMarker(MarkerOptions()
                     .position(it.position.coordinates)
                     .title(it.street))
-                    .setIcon(Marker.getMarkerIcon("#ff6200"))
-            //.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+            marker.tag = it
+            marker.setIcon(Marker.getMarkerIcon("#ff6200"))
         }
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(allLocations[0].position.coordinates, 12f))
 
