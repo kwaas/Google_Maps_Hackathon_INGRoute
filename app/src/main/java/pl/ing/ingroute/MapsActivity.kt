@@ -74,8 +74,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         } catch (e: Resources.NotFoundException) {
             Log.e(TAG, "Can't find style. Error: ", e)
         }
-        googleMap.setPadding(0, 0, resources.getDimensionPixelSize(R.dimen.map_zoom_buttons_right_margin),
-                resources.getDimensionPixelSize(R.dimen.map_zoom_buttons_bottom_margin))
+//        googleMap.setPadding(0, 0, resources.getDimensionPixelSize(R.dimen.map_zoom_buttons_right_margin),
+//                resources.getDimensionPixelSize(R.dimen.map_zoom_buttons_bottom_margin))
 
         googleMap.isTrafficEnabled = false
     }
@@ -89,7 +89,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     .title(it.street))
             marker.tag = it
             //marker.setIcon(Marker.getMarkerIcon("#ff6200"))
-            marker.setIcon(BitmapDescriptorFactory.fromBitmap(Marker.getMarkerBitmapFromView(android.R.drawable.ic_dialog_map, this)))
+            marker.setIcon(BitmapDescriptorFactory.fromBitmap(Marker.getMarkerBitmapFromView(R.drawable.ing_map_marker_2, this)))
         }
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(allLocations[0].position.coordinates, 12f))
 
@@ -180,15 +180,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 bestDestination.position.coordinates)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//        menuInflater.inflate(R.menu.menu_main, menu)
+//        return true
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return when (item.itemId) {
+//            R.id.action_settings -> true
+//            else -> super.onOptionsItemSelected(item)
+//        }
+//    }
 }
