@@ -32,6 +32,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private var googleMap: GoogleMap? = null
 
+    private var lastClicked: com.google.android.gms.maps.model.Marker? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
@@ -79,8 +81,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         } catch (e: Resources.NotFoundException) {
             Log.e(TAG, "Can't find style. Error: ", e)
         }
-        googleMap.setPadding(0, 0, resources.getDimensionPixelSize(R.dimen.map_zoom_buttons_right_margin),
-                resources.getDimensionPixelSize(R.dimen.map_zoom_buttons_bottom_margin))
+//        googleMap.setPadding(0, 0, resources.getDimensionPixelSize(R.dimen.map_zoom_buttons_right_margin),
+//                resources.getDimensionPixelSize(R.dimen.map_zoom_buttons_bottom_margin))
 
         googleMap.isTrafficEnabled = false
     }
@@ -108,6 +110,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         googleMap.setOnMarkerClickListener {
             route(googleMap, currentLocation.coordinates, it.position)
             it.showInfoWindow()
+            lastClicked = it
             googleMap.isTrafficEnabled = false
             return@setOnMarkerClickListener true
         }
@@ -118,7 +121,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val results = getDirectionsDetails(origin, destination, TravelMode.DRIVING)
         if (results != null) {
             addPolyline(results, googleMap)
-            //positionCamera(results.routes[overview], googleMap)
+            positionCamera(results.routes[overview], googleMap)
             //addMarkersToMap(results, googleMap)
         }
     }
@@ -144,7 +147,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun positionCamera(route: DirectionsRoute, mMap: GoogleMap) {
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(route.legs[overview].startLocation.lat, route.legs[overview].startLocation.lng), 12f))
+        var start = route.legs[overview].startLocation
+        var end = route.legs[overview].endLocation
+        val centerLat = start.lat - (start.lat - end.lat)/2
+        val centerLng = start.lng - (start.lng - end.lng)/2
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(centerLat, centerLng), 14f))
     }
 
     var polyline: Polyline? = null
@@ -181,6 +188,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         route(googleMap!!, LocationManager.newInstance().getCurrentLocation(context = applicationContext).coordinates,
                 bestDestination.position.coordinates)
+
+        lastClicked?.hideInfoWindow()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
