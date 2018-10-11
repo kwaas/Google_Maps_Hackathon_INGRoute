@@ -61,6 +61,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         markers(googleMap)
+        googleMap.setPadding(0, 0, resources.getDimensionPixelSize(R.dimen.map_zoom_buttons_right_margin),
+                resources.getDimensionPixelSize(R.dimen.map_zoom_buttons_bottom_margin))
     }
 
     private fun markers(googleMap: GoogleMap) {
