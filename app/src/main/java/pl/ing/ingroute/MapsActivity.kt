@@ -31,8 +31,6 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 
-
-
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private val TAG = "IngRoute"
@@ -124,10 +122,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         googleMap.setOnMarkerClickListener {
             route(googleMap, currentLocation.coordinates, it.position)
-            it.showInfoWindow()
-            lastClicked = it
-            googleMap.isTrafficEnabled = false
+            if (it.tag != null) {
+                it.showInfoWindow()
+                lastClicked = it
+                googleMap.isTrafficEnabled = false
+            }
             return@setOnMarkerClickListener true
+
         }
     }
 
