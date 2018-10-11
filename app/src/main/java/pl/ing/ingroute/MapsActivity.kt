@@ -1,6 +1,7 @@
 package pl.ing.ingroute
 
 import android.content.res.Resources
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -23,8 +24,7 @@ import kotlinx.android.synthetic.main.activity_maps.*
 import org.joda.time.DateTime
 import java.io.IOException
 import java.util.concurrent.TimeUnit
-
-
+import com.google.android.gms.maps.model.PolylineOptions
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -68,7 +68,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         markers(googleMap)
         googleMap.uiSettings.isZoomControlsEnabled = true
         try {
-            googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.ing))
+            googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.ing2))
         } catch (e: Resources.NotFoundException) {
             Log.e(TAG, "Can't find style. Error: ", e)
         }
@@ -85,6 +85,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             googleMap.addMarker(MarkerOptions()
                     .position(it.position.coordinates)
                     .title(it.street))
+                    .setIcon(Marker.getMarkerIcon("#ff6200"))
+            //.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
         }
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(allLocations[0].position.coordinates, 12f))
 
@@ -92,7 +94,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         googleMap.addMarker(MarkerOptions()
                 .position(currentLocation.coordinates)
-                .title("Twoja lokalizacja")).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                .title("Twoja lokalizacja"))
+                .setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
 
         googleMap.setOnMarkerClickListener {
             route(googleMap, currentLocation.coordinates, it.position)
@@ -141,7 +144,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun addPolyline(results: DirectionsResult, mMap: GoogleMap) {
         polyline?.remove()
         val decodedPath = PolyUtil.decode(results.routes[overview].overviewPolyline.encodedPath)
-        polyline = mMap.addPolyline(PolylineOptions().addAll(decodedPath))
+        polyline = mMap.addPolyline(PolylineOptions().addAll(decodedPath).color(resources.getColor(R.color.P1, null)))
     }
 
     private fun getEndLocationTitle(results: DirectionsResult): String {
