@@ -3,4 +3,5 @@
     <string name="title_activity_maps">ING Route</string>
     <string name="action_settings">Ustawienia</string>
     <string name="service_time">Czas obsługi: %1$d min</string>
+    <string name="route_time">Czas dojazdu: %1$d min</string>
 </resources>
