@@ -65,6 +65,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        googleMap.setInfoWindowAdapter(MarkerInfoViewAdapter(this))
         markers(googleMap)
         googleMap.uiSettings.isZoomControlsEnabled = true
         try {
@@ -82,9 +83,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val locationManager = LocationManager.newInstance()
         val allLocations = locationManager.getAllDepartmentsLocation()
         allLocations.forEach {
-            googleMap.addMarker(MarkerOptions()
+            val marker = googleMap.addMarker(MarkerOptions()
                     .position(it.position.coordinates)
                     .title(it.street))
+            marker.tag = it
+
         }
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(allLocations[0].position.coordinates, 12f))
 
@@ -92,7 +95,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         googleMap.addMarker(MarkerOptions()
                 .position(currentLocation.coordinates)
-                .title("Twoja lokalizacja")).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                .title("Twoja lokalizacja"))
+                .setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
 
         googleMap.setOnMarkerClickListener {
             route(googleMap, currentLocation.coordinates, it.position)
