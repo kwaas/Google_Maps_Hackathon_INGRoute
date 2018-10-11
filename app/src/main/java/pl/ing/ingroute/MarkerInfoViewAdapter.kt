@@ -34,6 +34,9 @@ class MarkerInfoViewAdapter(val context: Context) : GoogleMap.InfoWindowAdapter 
         val serviceTimeTv: TextView = view.findViewById(R.id.serviceTime)
         serviceTimeTv.text = context.getString(R.string.service_time, location?.conditions?.waitingTimeInMinutes)
 
+        val routeTimeTv: TextView = view.findViewById(R.id.routeTime)
+        routeTimeTv.text = context.getString(R.string.route_time, location?.conditions?.routeTimeInMinutes)
+
         return view
     }
 }

@@ -17,8 +17,10 @@ data class Location(val id: Int,
 
 data class Time(val start: String, val stop: String, val saturday: Boolean, val sunday: Boolean) {
     override fun toString() : String {
-        return "$start $stop"
+        return "$start - $stop"
     }
 }
 data class Position(val coordinates: LatLng)
-data class Conditions(val waitingTimeInMinutes: Int, val routeTimeInMinutes: Int = 1)
+data class Conditions(val waitingTimeInMinutes: Int, val routeTimeInMinutes: Int = 10) {
+    fun getSummaryServiceTime() = waitingTimeInMinutes + routeTimeInMinutes
+}

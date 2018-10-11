@@ -30,6 +30,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private val TAG = "IngRoute"
     private val overview = 0
 
+    private var googleMap: GoogleMap? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
@@ -63,6 +65,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        this.googleMap = googleMap
         googleMap.setInfoWindowAdapter(MarkerInfoViewAdapter(this))
         markers(googleMap)
         googleMap.uiSettings.isZoomControlsEnabled = true
@@ -162,8 +165,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun findBestRoute() {
-        Toast.makeText(this, "TODO Znajdź najlepszą trasę", Toast.LENGTH_SHORT).show()
-        //TODO
+        Toast.makeText(this, "Znaleziono najlepszą trasę", Toast.LENGTH_SHORT).show()
+
+        val locations = LocationManager.newInstance().getAllDepartmentsLocation()
+        var bestDestination = locations.first()
+
+        locations.forEach {
+            if (it.conditions.getSummaryServiceTime() < bestDestination.conditions.getSummaryServiceTime()) {
+                bestDestination = it
+            }
+        }
+
+        route(googleMap!!, LocationManager.newInstance().getCurrentLocation(context = applicationContext).coordinates,
+                bestDestination.position.coordinates)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
