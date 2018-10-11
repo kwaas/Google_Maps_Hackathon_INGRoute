@@ -13,7 +13,8 @@ data class Location(val id: Int,
                     val province: String,
                     val officeTime: Time = Time("10:00", "17:00", true, false),
                     val position: Position = Position(LatLng(1.0, 1.0)),
-                    val conditions: Conditions)
+                    val conditions: Conditions,
+                    val openHours: String)
 
 data class Time(val start: String, val stop: String, val saturday: Boolean, val sunday: Boolean)
 data class Position(val coordinates: LatLng)
