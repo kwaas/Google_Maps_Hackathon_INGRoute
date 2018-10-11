@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.activity_maps.*
 import org.joda.time.DateTime
 import java.io.IOException
 import java.util.concurrent.TimeUnit
-import com.google.android.gms.maps.model.MapStyleOptions
 
 
 
@@ -75,6 +74,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         googleMap.setPadding(0, 0, resources.getDimensionPixelSize(R.dimen.map_zoom_buttons_right_margin),
                 resources.getDimensionPixelSize(R.dimen.map_zoom_buttons_bottom_margin))
+
+        googleMap.isTrafficEnabled = false
     }
 
     private fun markers(googleMap: GoogleMap) {
@@ -95,6 +96,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         googleMap.setOnMarkerClickListener {
             route(googleMap, currentLocation.coordinates, it.position)
+            it.showInfoWindow()
+            googleMap.isTrafficEnabled = false
             return@setOnMarkerClickListener true
         }
     }
@@ -104,8 +107,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val results = getDirectionsDetails(origin, destination, TravelMode.DRIVING)
         if (results != null) {
             addPolyline(results, googleMap)
-            positionCamera(results.routes[overview], googleMap)
-            addMarkersToMap(results, googleMap)
+            //positionCamera(results.routes[overview], googleMap)
+            //addMarkersToMap(results, googleMap)
         }
     }
 
@@ -113,7 +116,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun setupGoogleMapScreenSettings(mMap: GoogleMap) {
         mMap.isBuildingsEnabled = true
         mMap.isIndoorEnabled = true
-        mMap.isTrafficEnabled = true
+        mMap.isTrafficEnabled = false
         val mUiSettings = mMap.uiSettings
         mUiSettings.isZoomControlsEnabled = true
         mUiSettings.isCompassEnabled = true
@@ -150,9 +153,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         return geoApiContext
                 .setQueryRateLimit(3)
                 .setApiKey(getString(R.string.google_maps_key))
-                .setConnectTimeout(1, TimeUnit.SECONDS)
-                .setReadTimeout(1, TimeUnit.SECONDS)
-                .setWriteTimeout(1, TimeUnit.SECONDS)
+                .setConnectTimeout(10, TimeUnit.SECONDS)
+                .setReadTimeout(10, TimeUnit.SECONDS)
+                .setWriteTimeout(10, TimeUnit.SECONDS)
     }
 
     private fun findBestRoute() {
