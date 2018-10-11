@@ -1,7 +1,9 @@
 package pl.ing.ingroute
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -21,10 +23,14 @@ import kotlinx.android.synthetic.main.activity_maps.*
 import org.joda.time.DateTime
 import java.io.IOException
 import java.util.concurrent.TimeUnit
+import com.google.android.gms.maps.model.MapStyleOptions
+
+
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
+    private val TAG = "IngRoute"
     private val overview = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +67,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         markers(googleMap)
+        googleMap.uiSettings.isZoomControlsEnabled = true
+        try {
+            googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.ing))
+        } catch (e: Resources.NotFoundException) {
+            Log.e(TAG, "Can't find style. Error: ", e)
+        }
         googleMap.setPadding(0, 0, resources.getDimensionPixelSize(R.dimen.map_zoom_buttons_right_margin),
                 resources.getDimensionPixelSize(R.dimen.map_zoom_buttons_bottom_margin))
     }
