@@ -3,7 +3,7 @@
     android:id="@+id/custom_marker_view"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:backgroundColor="@color/P1">
+    android:background="@color/P1">
 
     <ImageView
         android:id="@+id/profile_image"

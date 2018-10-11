@@ -85,7 +85,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     .position(it.position.coordinates)
                     .title(it.street))
             marker.tag = it
-            marker.setIcon(Marker.getMarkerIcon("#ff6200"))
+            //marker.setIcon(Marker.getMarkerIcon("#ff6200"))
+            marker.setIcon(BitmapDescriptorFactory.fromBitmap(Marker.getMarkerBitmapFromView(android.R.drawable.ic_dialog_map, this)))
         }
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(allLocations[0].position.coordinates, 12f))
 
