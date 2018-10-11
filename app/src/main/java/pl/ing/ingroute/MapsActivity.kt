@@ -1,9 +1,9 @@
 package pl.ing.ingroute
 
 import android.app.Dialog
-import android.content.DialogInterface
 import android.content.res.Resources
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
@@ -12,7 +12,6 @@ import android.util.Log
 import android.view.Gravity
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -229,10 +228,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val title = TextView(this)
         // Title Properties
         title.text = getString(R.string.confirm_title)
-        title.setPadding(10, 10, 10, 10)   // Set Position
+        title.setPadding(10, 40, 40, 10)   // Set Position
         title.gravity = Gravity.CENTER
         title.setTextColor(Color.BLACK)
         title.textSize = 20f
+        title.setTypeface(title.typeface, Typeface.BOLD)
         alertDialog.setCustomTitle(title)
 
         // Set Message
@@ -241,16 +241,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         msg.text = getString(R.string.confirm)
         msg.gravity = Gravity.CENTER_HORIZONTAL
         msg.setTextColor(Color.BLACK)
+        msg.setPadding(40, 40, 40, 10)   // Set Position
         alertDialog.setView(msg)
 
         // Set Button
         // you can more buttons
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "KAWA", DialogInterface.OnClickListener { dialog, which ->
-            // Perform Action on Button
-        })
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "HERBATA", DialogInterface.OnClickListener { dialog, which ->
-            // Perform Action on Button
-        })
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "KAWA") { _, _ ->
+            Snackbar.make(map_container, getString(R.string.confirm_coffee), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+        }
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "HERBATA") { _, _ ->
+            Snackbar.make(map_container, getString(R.string.confirm_tea), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+        }
 
         Dialog(applicationContext)
         alertDialog.show()

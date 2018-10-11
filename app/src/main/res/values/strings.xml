@@ -8,5 +8,7 @@
     <string name="confirm_title">Potwierdź wizytę w oddziale</string>
     <string name="confirm">Kliknij aby potwierdzić wizytę w oddziale.
         Dodatkowo możesz wybrać czy chcesz zostać poczęstowany kawą czy herbatą.
-        Zweryfikujemy Twoją tożsamość z pomocą modułu NFC w Twoim telefonie.</string>
+    </string>
+    <string name="confirm_coffee">Dziękujemy. Będzie na Ciebie czekać pyszna kawa</string>
+    <string name="confirm_tea">Dziękujemy. Będzie na Ciebie czekać pyszna herbata</string>
 </resources>
