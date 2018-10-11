@@ -234,18 +234,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         // Set Message
         val msg = TextView(this)
         // Message Properties
-        msg.text = "I am a Custom Dialog Box. \n Please Customize me."
+        msg.text = getString(R.string.confirm)
         msg.gravity = Gravity.CENTER_HORIZONTAL
         msg.setTextColor(Color.BLACK)
         alertDialog.setView(msg)
 
         // Set Button
         // you can more buttons
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", DialogInterface.OnClickListener { dialog, which ->
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "KAWA", DialogInterface.OnClickListener { dialog, which ->
             // Perform Action on Button
         })
-
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", DialogInterface.OnClickListener { dialog, which ->
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "HERBATA", DialogInterface.OnClickListener { dialog, which ->
             // Perform Action on Button
         })
 
@@ -253,17 +252,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         alertDialog.show()
 
         // Set Properties for OK Button
-        val okBT = alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL)
-        val neutralBtnLP = okBT.getLayoutParams() as LinearLayout.LayoutParams
-        neutralBtnLP.gravity = Gravity.FILL_HORIZONTAL
-        okBT.setPadding(50, 10, 10, 10)   // Set Position
-        okBT.setTextColor(Color.BLUE)
-        okBT.setLayoutParams(neutralBtnLP)
+        val coffeeBtn = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        val coffeeBtnLP = coffeeBtn.getLayoutParams() as LinearLayout.LayoutParams
+        coffeeBtnLP.gravity = Gravity.LEFT
+        coffeeBtn.setPadding(50, 10, 10, 10)   // Set Position
+        coffeeBtn.setTextColor(getColor(R.color.P1))
+        coffeeBtn.setLayoutParams(coffeeBtnLP)
 
-        val cancelBT = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-        val negBtnLP = okBT.getLayoutParams() as LinearLayout.LayoutParams
-        negBtnLP.gravity = Gravity.FILL_HORIZONTAL
-        cancelBT.setTextColor(Color.RED)
-        cancelBT.setLayoutParams(negBtnLP)
+        val teaBtn = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+        val neutralBtnLP = teaBtn.getLayoutParams() as LinearLayout.LayoutParams
+        neutralBtnLP.gravity = Gravity.LEFT
+        teaBtn.setPadding(50, 10, 10, 10)   // Set Position
+        teaBtn.setTextColor(getColor(R.color.P1))
+        teaBtn.setLayoutParams(neutralBtnLP)
     }
 }
