@@ -25,8 +25,6 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 
-
-
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private val TAG = "IngRoute"
@@ -69,7 +67,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         markers(googleMap)
         googleMap.uiSettings.isZoomControlsEnabled = true
         try {
-            googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.ing))
+            googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.ing2))
         } catch (e: Resources.NotFoundException) {
             Log.e(TAG, "Can't find style. Error: ", e)
         }
@@ -87,7 +85,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     .position(it.position.coordinates)
                     .title(it.street))
             marker.tag = it
-
+            marker.setIcon(Marker.getMarkerIcon("#ff6200"))
         }
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(allLocations[0].position.coordinates, 12f))
 
@@ -145,7 +143,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun addPolyline(results: DirectionsResult, mMap: GoogleMap) {
         polyline?.remove()
         val decodedPath = PolyUtil.decode(results.routes[overview].overviewPolyline.encodedPath)
-        polyline = mMap.addPolyline(PolylineOptions().addAll(decodedPath))
+        polyline = mMap.addPolyline(PolylineOptions().addAll(decodedPath).color(resources.getColor(R.color.P1, null)))
     }
 
     private fun getEndLocationTitle(results: DirectionsResult): String {
