@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">INGRoute</string>
-    <string name="title_activity_maps">IngRoute</string>
+    <string name="app_name">ING Route</string>
+    <string name="title_activity_maps">ING Route</string>
     <string name="action_settings">Ustawienia</string>
 </resources>
