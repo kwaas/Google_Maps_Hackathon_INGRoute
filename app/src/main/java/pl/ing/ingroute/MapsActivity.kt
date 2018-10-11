@@ -2,6 +2,7 @@ package pl.ing.ingroute
 
 import android.content.res.Resources
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
@@ -20,6 +21,7 @@ import com.google.maps.model.DirectionsResult
 import com.google.maps.model.DirectionsRoute
 import com.google.maps.model.TravelMode
 import kotlinx.android.synthetic.main.activity_maps.*
+import kotlinx.android.synthetic.main.content_main.*
 import org.joda.time.DateTime
 import java.io.IOException
 import java.util.concurrent.TimeUnit
@@ -42,10 +44,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fab.setOnClickListener {
-            Toast.makeText(this, getString(R.string.searching_best_route), Toast.LENGTH_SHORT).show()
-            fab.postDelayed(Runnable {
+            // Toast.makeText(this, getString(R.string.searching_best_route), Toast.LENGTH_SHORT).show()
+            Snackbar.make(map_container, getString(R.string.searching_best_route), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+            fab.postDelayed({
                 findBestRoute()
-            }, 100)
+            }, 250)
         }
     }
 
@@ -106,7 +110,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 .position(currentLocation.coordinates)
                 .title("Twoja lokalizacja"))
                 //.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-            .setIcon(BitmapDescriptorFactory.fromBitmap(Marker.getMarkerBitmapFromView(R.drawable.here_marker, this)))
+                .setIcon(BitmapDescriptorFactory.fromBitmap(Marker.getMarkerBitmapFromView(R.drawable.here_marker, this)))
 
         googleMap.setOnMarkerClickListener {
             route(googleMap, currentLocation.coordinates, it.position)
@@ -150,8 +154,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun positionCamera(route: DirectionsRoute, mMap: GoogleMap) {
         var start = route.legs[overview].startLocation
         var end = route.legs[overview].endLocation
-        val centerLat = start.lat - (start.lat - end.lat)/2
-        val centerLng = start.lng - (start.lng - end.lng)/2
+        val centerLat = start.lat - (start.lat - end.lat) / 2
+        val centerLng = start.lng - (start.lng - end.lng) / 2
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(centerLat, centerLng), 14f))
     }
 
