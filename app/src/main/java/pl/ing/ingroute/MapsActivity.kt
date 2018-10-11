@@ -39,7 +39,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-        fab.setOnClickListener { findBestRoute() }
+        fab.setOnClickListener {
+            Toast.makeText(this, getString(R.string.searching_best_route), Toast.LENGTH_SHORT).show()
+            fab.postDelayed(Runnable {
+                findBestRoute()
+            }, 100)
+        }
     }
 
     private fun getDirectionsDetails(origin: LatLng, destination: LatLng, mode: TravelMode): DirectionsResult? {
@@ -165,8 +170,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun findBestRoute() {
-        Toast.makeText(this, "Znaleziono najlepszą trasę", Toast.LENGTH_SHORT).show()
-
         val locations = LocationManager.newInstance().getAllDepartmentsLocation()
         var bestDestination = locations.first()
 
