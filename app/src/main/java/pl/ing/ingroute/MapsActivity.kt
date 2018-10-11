@@ -96,7 +96,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     .title(it.street))
             marker.tag = it
             //marker.setIcon(Marker.getMarkerIcon("#ff6200"))
-            marker.setIcon(BitmapDescriptorFactory.fromBitmap(Marker.getMarkerBitmapFromView(android.R.drawable.ic_dialog_map, this)))
+            marker.setIcon(BitmapDescriptorFactory.fromBitmap(Marker.getMarkerBitmapFromView(R.drawable.ing_map_marker_2, this)))
         }
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(allLocations[0].position.coordinates, 12f))
 
@@ -105,7 +105,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         googleMap.addMarker(MarkerOptions()
                 .position(currentLocation.coordinates)
                 .title("Twoja lokalizacja"))
-                .setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                //.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+            .setIcon(BitmapDescriptorFactory.fromBitmap(Marker.getMarkerBitmapFromView(R.drawable.here_marker, this)))
 
         googleMap.setOnMarkerClickListener {
             route(googleMap, currentLocation.coordinates, it.position)
@@ -192,15 +193,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         lastClicked?.hideInfoWindow()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//        menuInflater.inflate(R.menu.menu_main, menu)
+//        return true
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return when (item.itemId) {
+//            R.id.action_settings -> true
+//            else -> super.onOptionsItemSelected(item)
+//        }
+//    }
 }
