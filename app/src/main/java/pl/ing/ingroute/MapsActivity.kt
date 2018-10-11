@@ -1,12 +1,17 @@
 package pl.ing.ingroute
 
+import android.app.Dialog
+import android.content.DialogInterface
 import android.content.res.Resources
+import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
+import android.view.Gravity
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -25,6 +30,8 @@ import kotlinx.android.synthetic.main.content_main.*
 import org.joda.time.DateTime
 import java.io.IOException
 import java.util.concurrent.TimeUnit
+
+
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -89,6 +96,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 //                resources.getDimensionPixelSize(R.dimen.map_zoom_buttons_bottom_margin))
 
         googleMap.isTrafficEnabled = false
+
+        googleMap.setOnInfoWindowClickListener {
+            openDialog()
+        }
     }
 
     private fun markers(googleMap: GoogleMap) {
@@ -208,4 +219,55 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 //            else -> super.onOptionsItemSelected(item)
 //        }
 //    }
+
+
+    fun openDialog() {
+
+        val alertDialog = AlertDialog.Builder(this).create()
+
+        // Set Custom Title
+        val title = TextView(this)
+        // Title Properties
+        title.text = getString(R.string.confirm_title)
+        title.setPadding(10, 10, 10, 10)   // Set Position
+        title.gravity = Gravity.CENTER
+        title.setTextColor(Color.BLACK)
+        title.textSize = 20f
+        alertDialog.setCustomTitle(title)
+
+        // Set Message
+        val msg = TextView(this)
+        // Message Properties
+        msg.text = "I am a Custom Dialog Box. \n Please Customize me."
+        msg.gravity = Gravity.CENTER_HORIZONTAL
+        msg.setTextColor(Color.BLACK)
+        alertDialog.setView(msg)
+
+        // Set Button
+        // you can more buttons
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", DialogInterface.OnClickListener { dialog, which ->
+            // Perform Action on Button
+        })
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", DialogInterface.OnClickListener { dialog, which ->
+            // Perform Action on Button
+        })
+
+        Dialog(applicationContext)
+        alertDialog.show()
+
+        // Set Properties for OK Button
+        val okBT = alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL)
+        val neutralBtnLP = okBT.getLayoutParams() as LinearLayout.LayoutParams
+        neutralBtnLP.gravity = Gravity.FILL_HORIZONTAL
+        okBT.setPadding(50, 10, 10, 10)   // Set Position
+        okBT.setTextColor(Color.BLUE)
+        okBT.setLayoutParams(neutralBtnLP)
+
+        val cancelBT = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+        val negBtnLP = okBT.getLayoutParams() as LinearLayout.LayoutParams
+        negBtnLP.gravity = Gravity.FILL_HORIZONTAL
+        cancelBT.setTextColor(Color.RED)
+        cancelBT.setLayoutParams(negBtnLP)
+    }
 }
