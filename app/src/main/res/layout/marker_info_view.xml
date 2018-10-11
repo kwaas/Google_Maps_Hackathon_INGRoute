@@ -32,6 +32,8 @@
         android:id="@+id/serviceTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/routeTime"/>
+        android:layout_below="@id/routeTime"
+        android:textStyle="bold"
+        />
 
 </RelativeLayout>

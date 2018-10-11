@@ -5,4 +5,5 @@
     <string name="searching_best_route">Wyznaczanie najlepszej trasy</string>
     <string name="service_time">Czas obsługi: %1$d min</string>
     <string name="route_time">Czas dojazdu: %1$d min</string>
+    <string name="confirm_title">Potwierdź wizytę w oddziale</string>
 </resources>
